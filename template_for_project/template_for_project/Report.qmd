@@ -1,0 +1,173 @@
+---
+title: "Data Analysis Report - your title"
+author: "Your Names"
+format:
+  pdf:
+    documentclass: article
+    geometry:
+      - margin=1in
+    fontsize: 12pt
+execute:
+  echo: false
+  warning: false
+  message: false
+bibliography: references.bib
+---
+
+```{r}
+#| label: setup
+
+## Good practice to include libraries and functions you will need in a chunk
+## at the beginning of your file
+library(jtools)
+library(patchwork)
+library(tidyverse)
+## functions
+logit <- function(x) log(x/(1 - x))
+invlogit <- function(x) exp(x)/(1 + exp(x))
+
+## This sets the gpplot theme to white for all plots
+## the option `base_size` sets the base font size for all plots
+theme_set(
+    theme_bw(base_size = 8)
+)
+```
+
+# Abstract
+
+Write a summary of your project (around 300 words) here. This section should provide a concise overview of your research question, data, methods, and key findings.
+
+# Introduction
+
+In this section, introduce the problem and question(s) of interest that you aim to address in your analysis. Provide relevant background information and explain the motivation and significance of your research question. Cite manuscripts or websites you use. Here an example of how to cite a paper, @wickham2019. See  @quarto_cit for how to manage citations in Quarto.
+
+
+# Data and Methods
+
+Describe the data you used in your analysis, including the source, characteristics, and any pre-processing or cleaning steps you performed. 
+
+```{r}
+## Do not include much code in the report
+## make separate scripts if you have a lot of cleaning to do for the data
+## and for model exploration 
+
+## reading data
+crabs <- read_csv(file= "data/crabs_cleaned.csv")
+
+## convert to factor the necesary variables
+crabs <- crabs |>
+  mutate(
+    color = factor(color, 
+                   labels = c("light medium", "medium", "dark medium", "dark")),
+    spine = factor(spine, 
+                   labels = c("both good", "one worn or broken", "both worn or broken")), 
+)
+
+```
+
+
+
+```{r}
+## Produce figures
+
+crabs_prop <- crabs |>
+  group_by(color) |>
+  summarize(
+    prop_has_satellite = mean(has_satellite),
+    logit_prob_has_satellite = logit(prop_has_satellite),
+    total_crabs = length(has_satellite)
+  )
+
+plot1 <- ggplot(crabs_prop, aes(color, logit_prob_has_satellite)) +
+  geom_point() + 
+  labs(y = 'logit of proportion with satellite')
+
+plot2 <- ggplot(crabs) +
+     geom_boxplot(aes(x = width, y = has_satellite, group = has_satellite)) +
+     labs(title = "Distribution of width across groups")
+ 
+# Arrange multiple plots using patchwork
+plot_combined <- plot1 + plot2
+```
+
+```{r}
+#| label: fig-eda
+#| fig-cap: "Example figure showing two plots side by side; here in the caption you should write a brief description of what the two plots represents: ``Left side panel shows the logit of the proportion of crabs with satellites for each group of crabs with different color. The right side panel shows the distirbution of the width among crabs with and without satellites.'' "
+#| fig-width: 6
+#| fig-height: 3
+#| fig-show: hold
+
+# Display the combined plot
+plot_combined
+```
+
+This is a good place where to include results of your exploratory data analysis. See @fig-eda as an example. 
+Check the .qmd file for an example of how to include plots, control their size and include references in the text. 
+
+
+You should also explain the methods you employed. I expect you to define the statistical model you chose for your data in mathematical form, as we did throughout the course. 
+
+Crab example: we define as outcome the presence/absence of a satellite for each crab and denote the observed values as $y_i$ with $i = 1, \ldots, n$ with $n = 173$. Let $y_i = 1$ indicate presence of a satellite and $0$ otherwise. 
+
+We assume that each $y_i$ is a realization of a random variables $Y_i \sim \mbox{Bernoulli}(p_i)$ independently, and model the probability of having a satellite for each crab using the following logistic regression:
+
+$$
+\begin{aligned}
+  \mbox{logit}(p_i) = & \beta_0 + \\ 
+                    & \beta_1 \times \text{I(color == medium)}_i  \\
+                   & \beta_2 \times \text{I(color == dark medium)}_i \\
+                   & \beta_3 \times \text{I(color == dark)}_i \\
+                   & \beta_4  \times \text{I(width)}_i
+\end{aligned}
+$$ {#eq-crab-model}
+
+where $\mbox{I}()$ in @eq-crab-model indicates a dummy variable, taking value 1 when the condition is true and zero otherwise. 
+
+# Results
+Present your results in this section, including figures, tables, and any other relevant outputs from your analysis. 
+
+```{r}
+#| label: model-summary
+#| tbl-cap: "Logistic regression summary"
+
+m_color_width <- glm(has_satellite ~ color + width, family = 'binomial', data = crabs)
+summ(m_color_width, model.info = FALSE, model.fit = FALSE)
+```
+
+You can also include figure that you previously saved. 
+
+![Example of how to include a figure](figures/3302_header.jpg){width=60%}
+
+See \url{https://quarto.org/docs/authoring/figures.html} for more options. 
+
+To display the model summary in a nice format you can use the `summ()` function from the `jtools` package.
+ 
+Other libraries: 
+\begin{itemize}
+\item \texttt{xtable}: good if you are familiar with latex (see \href{https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf}{xtable documentation} for examples)
+\item \texttt{gtable}, implements a ``grammar of table'' idea (see \url{https://gt.rstudio.com} for documentation)
+\end{itemize}
+
+In this section, discuss and interpret your results. Explain the implications and significance of your findings, and relate them to your research question and existing literature or theories.
+
+# Conclusion
+
+Summarize your main findings and conclusions in this section. Highlight the key takeaways and contributions of your analysis, and provide recommendations or suggestions for future research or practical applications based on your results.
+
+### References
+
+::: {#refs}
+:::
+
+# Appendix (Optional)
+
+If you want to include your R code as an appendix, you can create a new code chunk and set `#| echo: true` to show the code and `#| eval: false` to avoid that to be run. You can also provide scripts separately as supplementary material.
+
+```{r}
+#| echo: true
+#| eval: false
+
+# Your code here
+```
+
+

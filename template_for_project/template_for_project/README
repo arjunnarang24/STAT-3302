@@ -1,0 +1,5 @@
+This folder contains all the files for STAT 3302 project
+
+data : folder containing the data (raw data, and any cleaned version)
+figures: folder containing figures 
+scripts: folder that contains R script for the analysis
