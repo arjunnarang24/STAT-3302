@@ -1,6 +1,6 @@
 ---
-title: "Data Analysis Report - your title"
-author: "Your Names"
+title: "Data Analysis Report - Predicting Animal Adoption at Long Beach Animal Shelter"
+author: "Arjun Narang, Lexie Wheeler, Adithi Math, Kimball Otteson"
 format:
   pdf:
     documentclass: article
@@ -37,9 +37,25 @@ theme_set(
 
 Write a summary of your project (around 300 words) here. This section should provide a concise overview of your research question, data, methods, and key findings.
 
+This project investigates the factors that influence pet adoption at the Long Beach Animal Shelter, using a dataset provided via the {animalshelter} R package and TidyTuesday repository. With over 29,000 animal records, we aim to identify the variables that significantly impact the likelihood of an animal being adopted.
+
+Our research focuses on predicting adoption (yes/no) using a logistic regression model. Key predictors include species (animal_type), intake condition, sex, intake type, and season of outcome. After cleaning and transforming the dataset—including recoding the outcome into a binary variable and engineering a season variable—we explore adoption rates across each predictor and fit a Bernoulli logistic model to estimate the probability of adoption.
+
+Preliminary analysis reveals variation in adoption likelihood across animal species and intake types, as well as some seasonal trends. This analysis offers actionable insights for shelters looking to optimize adoption efforts and prioritize animals who may need more assistance finding homes. CHANGE THIS (JUST FILLER)
+
 # Introduction
 
 In this section, introduce the problem and question(s) of interest that you aim to address in your analysis. Provide relevant background information and explain the motivation and significance of your research question. Cite manuscripts or websites you use. Here an example of how to cite a paper, @wickham2019. See  @quarto_cit for how to manage citations in Quarto.
+
+Animal shelters play a vital role in animal welfare, often facing resource constraints while handling high intake volumes. One pressing issue is determining which animals are most likely to be adopted and how different factors affect this likelihood. Better understanding of adoption patterns can inform targeted interventions to improve outcomes.
+
+Our main research questions are:
+
+Are certain types of pets more likely to be adopted than others?
+
+How do factors like intake condition, sex, intake type, and season influence adoption likelihood?
+
+Using data from the Long Beach Animal Shelter, we aim to model adoption probabilities and highlight actionable trends. This work builds on the goal of improving animal outcomes through evidence-based strategies.
 
 
 # Data and Methods
@@ -64,6 +80,37 @@ crabs <- crabs |>
 )
 
 ```
+
+```{r}
+# Load Data
+longbeach_partial <- readRDS("data/longbeach_partial.rds")
+
+# Create a binary variable: 1 if adopted, 0 otherwise
+longbeach <- longbeach_partial %>%
+  mutate(adopted = ifelse(tolower(trimws(outcome_type)) == "adoption", 1, 0))
+
+# Make animal type a factor
+longbeach <- longbeach %>%
+  mutate(
+    animal_type = as.factor(animal_type),
+    intake_condition = as.factor(intake_condition),
+    sex = as.factor(sex),
+    intake_type = as.factor(intake_type)
+  )
+
+# Make seasons
+longbeach <- longbeach %>%
+  mutate(season = case_when(
+    format(outcome_date, "%m") %in% c("12", "01", "02") ~ "Winter",
+    format(outcome_date, "%m") %in% c("03", "04", "05") ~ "Spring",
+    format(outcome_date, "%m") %in% c("06", "07", "08") ~ "Summer",
+    format(outcome_date, "%m") %in% c("09", "10", "11") ~ "Fall",
+    TRUE ~ NA_character_
+  ))
+longbeach_clean <- na.omit(longbeach %>%
+                             select(adopted, animal_type, intake_condition, sex, intake_type, outcome_date, primary_color, season))
+```
+
 
 
 
