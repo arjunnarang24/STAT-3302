@@ -1,7 +1,8 @@
 ############################
 ## This script performs data cleaning
-## Last modified: 2025-03-31
-## SP: Added season variable and changed working directory
+## Last modified: 2025-04-17
+## SP: I removed some variables
+## Updated a saveRDS for the Project Report to save space
 ############################
 ## libraries we are using 
 library(tidyverse)
@@ -40,6 +41,8 @@ longbeach <- longbeach_raw_data |>
       as.factor
     )
   )
+
+saveRDS(longbeach, "../data/longbeach_partial.rds")
 
 # Create a binary variable: 1 if adopted, 0 otherwise
 longbeach <- longbeach %>%
