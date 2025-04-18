@@ -280,36 +280,39 @@ ggsave(plot = p_type, filename = "../figures/intakeTypeResid")
 #   - intake_typereturn (baseline)
 #   - intake_typetrap, neuter, return DONYE
 
-########
+########!!!!!!!!!!!!!!
 
 #The model with the test fit (lowest AIC) is the model with: 
 #animal_type + intake_condition + sex + intake_type (in that order)
+#so:
+#Y_i ~ Bernoulli(p_i), i = 1, 2, ..., 29600
+#logit(p_i) = β0 + β1*animal_type + β2*intake_condition + β3*sex + β4*intake_type
 
-#######
+#######!!!!!!!!!!!!!!!!
 
 ###Baseline I used: Normally behaved, male, foster, dog
 
-#animal_typebird 2.84023163
-#animal_typecat 1.15281370
-#animal_typelivestock 13.11267223
-#animal_typeother 1.80466383
-#animal_typerabbit 0.56057187
-#intake_conditionaged 0.34786388
-#intake_conditionbehavior  moderate 0.59201338
-#intake_conditionbehavior  severe 0.30441861
-#intake_conditionbehavior  mild   1.52315669          
-#intake_conditionferal 0.06770035
-#intake_conditionfractious 0.18280726
-#intake_conditionill mild 1.13264170
-#intake_conditionill moderate 0.69925536
-#intake_conditionill severe 0.41694512
-#intake_conditioninjured  mild 0.88528150
-#intake_conditioninjured  moderate 0.64599280
-#intake_conditioninjured  severe 0.29015271
-#intake_conditionunder age/weight 1.24618937
-#sexNeutered 11.10214121
-#sexSpayed 11.35987488
-#intake_typetrap, neuter, return 0.02729971
+#animal_typebird:              2.84023163
+#animal_typecat:               1.15281370
+#animal_typelivestock:         13.11267223
+#animal_typeother:             1.80466383
+#animal_typerabbit:            0.56057187
+#intake_conditionaged:         0.34786388
+#intake_conditionbehavior  moderate:     0.59201338
+#intake_conditionbehavior  severe:       0.30441861
+#intake_conditionbehavior  mild:         1.52315669          
+#intake_conditionferal:                  0.06770035
+#intake_conditionfractious:              0.18280726
+#intake_conditionill mild:               1.13264170
+#intake_conditionill moderate:           0.69925536
+#intake_conditionill severe:             0.41694512
+#intake_conditioninjured  mild:          0.88528150
+#intake_conditioninjured  moderate:      0.64599280
+#intake_conditioninjured  severe:        0.29015271
+#intake_conditionunder age/weight:       1.24618937
+#sexNeutered:                      11.10214121
+#sexSpayed:                        11.35987488
+#intake_typetrap, neuter, return:        0.02729971
 
 #i.e.: All else equal, a Bird is 2.84023163 times more likely to be adopted than a Normally behaved male (unspayed/un-neutered) foster dog.
 
