@@ -155,24 +155,47 @@ rateByType <- ggplot(intakeType, aes(x = reorder(intake_type, -adoption_rate), y
 
 ggsave(plot = rateByType, filename = "../figures/adoptionByType.pdf")
 
+# putting colors into more simple categories that are easier to understand for reader
+longbeach <- longbeach %>%
+  mutate(color = case_when(
+    tolower(primary_color) %in% c("tricolor", "calico", "tabby", "ticked", "dapple", "blue merle", "blue tick", "brown tiger", "liver tick", "point", "seal point") ~ "Patterns",
+    tolower(primary_color) %in% c("brown", "brown tabby", "brown brindle", "ch lynx point", "chocolate", "chocolate point", "brown merle", "sable", "snowshoe", "tan", "yellow brindle") ~ "Browns",
+    tolower(primary_color) %in% c("blue", "blue brindle", "blue lynx point", "blue cream", "blue point", "blue tabby", "gray", "gray tabby", "gray tiger", "lynx point", "seal", "silver", "silver tabby", "st lynx point", "tortie dilute") ~ "Grays and blues", 
+    tolower(primary_color) %in% c("apricot", "calico dilute", "calico point", "calico tabby", "fawn", "lilac_cream point", "liver", "orange", "orange tabby", "peach", "pink", "red", "red merle", "red point", "ruddy") ~ "Orange and Red",
+    tolower(primary_color) %in% c("black", "black lynx point", "black smoke", "black tabby", "black tiger", "torbie", "tortie") ~ "Black or Dark",
+    tolower(primary_color) %in% c("white", "flame point", "lilac lynx point", "lilac point", "silver lynx point") ~ "White Based",
+    tolower(primary_color) %in% c("green") ~ "Greens",
+    tolower(primary_color) %in% c("yellow", "blonde", "buff", "cream", "cream point", "cream tabby", "gold", "wheat") ~ "Cream and yellows",
+    TRUE ~ NA_character_
+  ))
+# Check if colors are correctly assigned
+table(longbeach$color)
+
 
 # Adoption rate by Primary Color
 rateColor <- longbeach %>%
-  filter(!is.na(primary_color) & !is.na(adopted)) %>%
-  group_by(primary_color) %>%
+  filter(!is.na(color) & !is.na(adopted)) %>%
+  group_by(color) %>%
   summarise(adoption_rate = mean(adopted) * 100) %>%
   arrange(desc(adoption_rate))
 
-# Top 20 adoption rate colors. There are too many to graph all on one chart
-topColors <- rateColor %>%
-  slice_max(adoption_rate, n = 20)
-
-# Plot Adoption Rate by colors using only the top 20 with the highest adoption
-rateByColor <- ggplot(topColors, aes(x = reorder(primary_color, -adoption_rate), y = adoption_rate)) +
-  geom_col(fill = "steelblue") +
+# Plot Adoption Rate by colors using the categories we just made
+rateByColor <- ggplot(rateColor, aes(x = reorder(color, -adoption_rate), y = adoption_rate, fill = color)) +
+  geom_col() +
   labs(title = "Adoption Rates by Primary Color",
        x = "Primary Color",
        y = "Adoption Rate (%)") +
-  theme_minimal() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  scale_fill_manual(values = c(
+    "Patterns" = "darkorchid",
+    "Browns" = "brown",
+    "Grays and blues" = "steelblue",
+    "Orange and Red" = "red",
+    "Black or Dark" = "black",
+    "White Based" = "lightgray",
+    "Greens" = "darkgreen",
+    "Cream and yellows" = "wheat"
+  ))
 
 ggsave(plot = rateByColor, filename = "../figures/adoptionByColor.pdf")
