@@ -63,7 +63,7 @@ gm1 = glm(adopted ~ animal_type, data = longbeach_clean, family = binomial)
 gm2 = glm(adopted ~ animal_type + intake_condition, data = longbeach_clean, family = binomial)
 gm3 = glm(adopted ~ animal_type + intake_condition + sex, data = longbeach_clean, family = binomial)
 gm4 = glm(adopted ~ animal_type + intake_condition + sex + intake_type, data = longbeach_clean, family = binomial)
-gm5 = glm(adopted ~ animal_type + intake_condition + sex + intake_type + primary_color, data = longbeach_clean, family = binomial)
+gm5 = glm(adopted ~ animal_type + intake_condition + sex + intake_type + color, data = longbeach_clean, family = binomial)
 
 AIC(null, gm1, gm2, gm3, gm4, gm5)
 
