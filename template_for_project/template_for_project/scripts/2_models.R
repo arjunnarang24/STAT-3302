@@ -67,7 +67,7 @@ gm5 = glm(adopted ~ animal_type + intake_condition + sex + intake_type + primary
 
 AIC(null, gm1, gm2, gm3, gm4, gm5)
 
-step(null, scope = list(lower = nyull, upper = gm5), direction = "both")
+step(null, scope = list(lower = null, upper = gm5), direction = "both")
 
 
 ##################
@@ -140,7 +140,7 @@ conydibtiony = ggplot(longbeach_clean, aes(x = intake_condition, y = adopted)) +
                   data = nyew3, size = 1, color = scales::muted('blue')) +
   labs(title = "Probability of Adoption based on Intake Condition", x = "Intake Condition", y = "p(Adopted)")
 
-ggsave(plot = conydibtiony, filename = "../figures/intakeCondition")
+ggsave(plot = conydibtiony, filename = "../figures/intakeCondition.pdf")
 
 #IGNORE MAX WITH LARGE INTERVAL (weird variable)
 #Max: Mild
@@ -167,7 +167,7 @@ sex <- ggplot(longbeach_clean, aes(x = sex, y = adopted)) +
                   data = nyew, size = 1, color = scales::muted('blue')) +
   labs(title = "Probability of Adoption based on Sex", x = "Sex", y = "p(Adopted)")
 
-ggsave(plot = sex, filename = "../figures/sex")
+ggsave(plot = sex, filename = "../figures/sex.pdf")
 
 #Max: Spayed
 #Min: Unknown, then male, barely more than female
@@ -192,7 +192,7 @@ btnype = ggplot(longbeach_clean, aes(x = intake_type, y = adopted)) +
                   data = nyew4, size = 1, color = scales::muted('blue')) +
   labs(title = "Probability of Adoption based on Intake Type", x = "Intake Type", y = "p(Adopted)")
 
-ggsave(plot = btnype, filename = "../figures/intakeType")
+ggsave(plot = btnype, filename = "../figures/intakeType.pdf")
 
 #Min: Technically "euthenasia required" and "foster", But I'd say "trap, neuter, return" (more samples)
 #Max: return
@@ -217,14 +217,14 @@ p_resid = ggplot(resid.df, aes(x = fitted, y = deviance)) +
   geom_hline(yintercept = 0, col = 2) +
   labs(title = "Residuals", x = "Fitted", y = "Deviance")
 #p_resid
-ggsave(plot = p_resid, filename = "../figures/modelResid")
+ggsave(plot = p_resid, filename = "../figures/modelResid.pdf")
 
 p_animal = ggplot(resid.df, aes(x = Animal, y = deviance)) +
   geom_point() +
   geom_hline(yintercept = 0, col = 2) +
   labs(title = "Residuals of Animal Type", x = "Animal Type", y = "Deviance")
 #p_animal
-ggsave(plot = p_animal, filename = "../figures/AnimalResid")
+ggsave(plot = p_animal, filename = "../figures/AnimalResid.pdf")
 
 
 p_condition = ggplot(resid.df, aes(x = intake_condition, y = deviance)) +
@@ -232,7 +232,7 @@ p_condition = ggplot(resid.df, aes(x = intake_condition, y = deviance)) +
   geom_hline(yintercept = 0, col = 2) +
   labs(title = "Residuals of Intake Condition", x = "Intake Condition", y = "Deviance")
 #p_condition
-ggsave(plot = p_condition, filename = "../figures/ConditionResid")
+ggsave(plot = p_condition, filename = "../figures/ConditionResid.pdf")
 
 
 p_sex = ggplot(resid.df, aes(x = Sex, y = deviance)) +
@@ -240,7 +240,7 @@ p_sex = ggplot(resid.df, aes(x = Sex, y = deviance)) +
   geom_hline(yintercept = 0, col = 2) +
   labs(title = "Residuals of Sex", x = "Sex", y = "Deviance")
 #p_sex
-ggsave(plot = p_sex, filename = "../figures/SexResid")
+ggsave(plot = p_sex, filename = "../figures/SexResid.pdf")
 
 
 p_type = ggplot(resid.df, aes(x = intake_type, y = deviance)) +
@@ -248,7 +248,7 @@ p_type = ggplot(resid.df, aes(x = intake_type, y = deviance)) +
   geom_hline(yintercept = 0, col = 2) +
   labs(title = "Residuals of Intake Type", x = "Intake Type", y = "Deviance")
 #p_type
-ggsave(plot = p_type, filename = "../figures/intakeTypeResid")
+ggsave(plot = p_type, filename = "../figures/intakeTypeResid.pdf")
 
 
 #########################
