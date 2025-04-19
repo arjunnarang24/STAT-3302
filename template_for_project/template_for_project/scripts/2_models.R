@@ -230,7 +230,7 @@ ggsave(plot = p_animal, filename = "../figures/AnimalResid.pdf")
 p_condition = ggplot(resid.df, aes(x = intake_condition, y = deviance)) +
   geom_point() +
   geom_hline(yintercept = 0, col = 2) +
-  labs(title = "Residuals of Intake Condition", x = "Intake Condition", y = "Deviance")
+  labs(title = "Residuals of Intake Condition", x = "Intake Condition", y = "Deviance") +  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 #p_condition
 ggsave(plot = p_condition, filename = "../figures/ConditionResid.pdf")
 
@@ -246,7 +246,7 @@ ggsave(plot = p_sex, filename = "../figures/SexResid.pdf")
 p_type = ggplot(resid.df, aes(x = intake_type, y = deviance)) +
   geom_point() +
   geom_hline(yintercept = 0, col = 2) +
-  labs(title = "Residuals of Intake Type", x = "Intake Type", y = "Deviance")
+  labs(title = "Residuals of Intake Type", x = "Intake Type", y = "Deviance") + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 #p_type
 ggsave(plot = p_type, filename = "../figures/intakeTypeResid.pdf")
 
