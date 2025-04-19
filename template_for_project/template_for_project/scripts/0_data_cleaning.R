@@ -1,8 +1,7 @@
 ############################
 ## This script performs data cleaning
-## Last modified: 2025-04-17
+## Last modified: 2025-03-31
 ## SP: I removed some variables
-## Updated a saveRDS for the Project Report to save space
 ############################
 ## libraries we are using 
 library(tidyverse)
@@ -66,8 +65,23 @@ longbeach <- longbeach %>%
     format(outcome_date, "%m") %in% c("09", "10", "11") ~ "Fall",
     TRUE ~ NA_character_
   ))
+
+# putting colors into more simple categories that are easier to understand for reader
+longbeach <- longbeach %>%
+  mutate(color = case_when(
+    tolower(primary_color) %in% c("tricolor", "calico", "tabby", "ticked", "dapple", "blue merle", "blue tick", "brown tiger", "liver tick", "point", "seal point") ~ "Patterns",
+    tolower(primary_color) %in% c("brown", "brown tabby", "brown brindle", "ch lynx point", "chocolate", "chocolate point", "brown merle", "sable", "snowshoe", "tan", "yellow brindle") ~ "Browns",
+    tolower(primary_color) %in% c("blue", "blue brindle", "blue lynx point", "blue cream", "blue point", "blue tabby", "gray", "gray tabby", "gray tiger", "lynx point", "seal", "silver", "silver tabby", "st lynx point", "tortie dilute") ~ "Grays and blues", 
+    tolower(primary_color) %in% c("apricot", "calico dilute", "calico point", "calico tabby", "fawn", "lilac_cream point", "liver", "orange", "orange tabby", "peach", "pink", "red", "red merle", "red point", "ruddy") ~ "Orange and Red",
+    tolower(primary_color) %in% c("black", "black lynx point", "black smoke", "black tabby", "black tiger", "torbie", "tortie") ~ "Black or Dark",
+    tolower(primary_color) %in% c("white", "flame point", "lilac lynx point", "lilac point", "silver lynx point") ~ "White Based",
+    tolower(primary_color) %in% c("green") ~ "Greens",
+    tolower(primary_color) %in% c("yellow", "blonde", "buff", "cream", "cream point", "cream tabby", "gold", "wheat") ~ "Cream and yellows",
+    TRUE ~ NA_character_
+  ))
+
 longbeach_clean <- na.omit(longbeach %>%
-                             select(adopted, animal_type, intake_condition, sex, intake_type, outcome_date, primary_color, season))
+                             select(adopted, animal_type, intake_condition, sex, intake_type, outcome_date, primary_color, season, color))
 
 ## .rds format
 saveRDS(longbeach_clean, "../data/longbeach_clean.rds")
