@@ -130,6 +130,105 @@ Across all predictors:
 - The horizontal spread of residuals proves there is no clear pattern of heteroscedasticity.
 - These plots all collectively support the use of the chosen predictors, and the model appears to generalize well to the observed data.
 
+## Looking at AIC output and Stepwise Regression
+
+Step 1: Starting from the Null Model
+
+Null model AIC = 30623.21
+Adding sex reduces the AIC to 22953.39, a substantial improvement of nearly 7,670 points, making it the strongest single predictor.
+Other predictors also lowered the AIC:
+intake_type: AIC = 25533.36
+animal_type: AIC = 26776.34
+intake_condition: AIC = 29932.68
+
+Step 2: Adding to the Model with sex
+The updated model is adopted ~ sex (AIC = 22953.39)
+Adding intake_condition yields a large drop in AIC to 22216.39, proving this variable meaningfully improves model performance
+Adding other variables instead gives higher AICs:
+intake_type: AIC = 22616.49
+animal_type: AIC = 22769.29
+
+Step 3: Adding to the Model with sex + intake_condition
+Current AIC = 22216.39
+Adding intake_type lowers AIC further to 21928.34
+Other options:
+animal_type: AIC = 22021.64
+intake_type is selected as the next best variable.
+Summary of Optimal Model (Lowest AIC = 21928.34)
+
+The best model identified by stepwise selection includes:
+adopted ~ sex + intake_condition + intake_type
+This model reduces the AIC by 8,695 points compared to the null model, showing a large improved fit. 
+
+Sex had the largest individual effect.
+Intake condition captures medical and behavioral differences in animals.
+Intake type reflects the context in which animals entered the shelter (for instance, foster, stray, TNR).
+
+## Interpretting the Regression model and odds ratios
+Model Overview
+This logistic regression model estimates the log-odds of an animal being adopted based on:
+Animal type
+Intake condition
+Sex
+Intake type
+The baseline category (intercept) is:
+
+A male, unaltered dog with normal intake condition, from a foster intake type.
+The model has:
+Null deviance: 30,621 on 29,599 degrees of freedom
+Residual deviance: 21,683 on 29,559 degrees of freedom
+AIC: 21,765 — suggesting strong improvement over the null model.
+
+
+Animal Type
+- bird: Estimate = 1.044, p < 0.001
+    - Birds are significantly more likely to be adopted than the baseline (dogs). Odds increase by exp(1.044) ≈ 2.84 times.
+- cat: Estimate = 0.142, p = 0.0004
+    - Cats also have higher odds than dogs; odds ratio ≈ 1.15.
+- guinea pig: Estimate = 1.797, p < 2e-16
+    - Very high adoption likelihood compared to dogs; odds ratio ≈ 6.03.
+- livestock: Estimate = 2.574, p < 0.001
+    - Strong effect, odds ratio ≈ 13.11.
+- rabbit: Estimate = –0.579, p < 0.001
+    - Rabbits are significantly less likely to be adopted than dogs; odds ratio ≈ 0.56.
+- amphibian, wild, and reptile: Not statistically significant, most likely due to low sample sizes.
+
+Intake Condition
+- feral: Estimate = –2.693, p < 2e-16
+    - Extremely reduced chance of adoption; odds ratio ≈ 0.07.
+- fractious (aggressive): Estimate = –1.699, p < 2e-16
+    - Significantly less likely to be adopted; odds ratio ≈ 0.18.
+- behavior severe: Estimate = –1.189, p = 0.005
+    - Odds of adoption ≈ 0.30.
+- ill severe: Estimate = –0.875, p < 1e-9
+    - Decreases odds to ≈ 0.42.
+- injured severe: Estimate = –1.237, p < 2e-16
+    - Reduces odds significantly to ≈ 0.29.
+- under age/weight: Estimate = 0.220, p < 0.001
+    - Slightly increases odds of adoption; odds ratio ≈ 1.25.
+- behavior mild, ill mild, and injured mild: Not statistically significant.
+
+Sex
+- Neutered: Estimate = 2.407, p < 2e-16
+    - Odds of adoption increase by exp(2.407) ≈ 11.10 times relative to intact males.
+- Spayed: Estimate = 2.430, p < 2e-16
+    - Odds increase by exp(2.430) ≈ 11.36.
+- Unknown: Estimate = –1.871, p < 2e-16
+    - Much lower odds of adoption; odds ratio ≈ 0.15.
+- Female: Not statistically significant compared to males.
+ 
+Intake Type
+- trap, neuter, return (TNR): Estimate = –3.601, p = 0.023
+    - Much lower likelihood of adoption (odds ratio ≈ 0.027), which makes sense since animals in this category are usually returned to their environment.
+- Other intake types (e.g., stray, owner surrender) were not statistically significant, suggesting their effect is less pronounced or more variable in the dataset.
+Conclusion
+This model strongly supports:
+Sterilization status is the strongest predictor of adoption (odds are much higher).
+Animals with mild or no health/behavioral issues are more adoptable.
+Species like birds, guinea pigs, and livestock are more likely to be adopted than dogs, while rabbits are less likely.
+Animals with severe illness, injury, or behavioral issues have significantly lower odds of adoption.
+TNR programs are highly associated with non-adoption outcomes, as expected.
+
 ## Looking at each indivudal model
 
 
