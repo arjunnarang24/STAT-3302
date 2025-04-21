@@ -102,7 +102,7 @@ Model Diagnostics: Pearson Residuals
 To assess model fit, we examined Pearson residuals versus fitted values for each predictor included in the final logistic regression model.
 1. Animal Type
 - Most residuals are clustered around 0, indicating that the model fits well for most categories of animal type.
-- A few points with residuals above 1 suggest some minor underfitting (for instance, maybe actual adoption outcomes were higher than predicted) for certain less common animal types.
+- A few points with residuals above 1 might suggest some minor underfitting (for instance, maybe actual adoption outcomes were higher than predicted) for certain less common animal types.
 - However, no residuals exceed ±2, indicating that there are no extreme outliers or poor-fitting categories.
 Conclusion: The model captures adoption patterns by animal type reasonably well.
 
