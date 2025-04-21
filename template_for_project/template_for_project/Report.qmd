@@ -39,7 +39,7 @@ Write a summary of your project (around 300 words) here. This section should pro
 
 This project investigates the factors that influence pet adoption at the Long Beach Animal Shelter, using a dataset provided via the {animalshelter} R package and TidyTuesday repository. With over 29,000 animal records, we aim to identify the variables that significantly impact the likelihood of an animal being adopted.
 
-Our research focuses on predicting adoption (yes/no) using a logistic regression model. Key predictors include species (animal_type), intake condition, sex, intake type, and season of outcome. After cleaning and transforming the dataset—including recoding the outcome into a binary variable and engineering a season variable—we explore adoption rates across each predictor and fit a Bernoulli logistic model to estimate the probability of adoption.
+Our research focuses on predicting adoption (yes/no) using a logistic regression model. Key predictors include species animal_type, intake condition, sex, intake type, primary color, and season of outcome. After cleaning and transforming the dataset—including recoding the outcome into a binary variable and engineering a season variable—we explore adoption rates across each predictor and fit a Bernoulli logistic model to estimate the probability of adoption.
 
 Preliminary analysis reveals variation in adoption likelihood across animal species and intake types, as well as some seasonal trends. This analysis offers actionable insights for shelters looking to optimize adoption efforts and prioritize animals who may need more assistance finding homes. CHANGE THIS (JUST FILLER)
 
