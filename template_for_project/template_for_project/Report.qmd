@@ -148,6 +148,62 @@ plot_combined <- plot1 + plot2
 plot_combined
 ```
 
+
+## Data Description and Preprocessing
+
+The dataset for this project comes from the Long Beach Animal Shelter, obtained through the `animalshelter` R package and the TidyTuesday project (March 4, 2025). It contains over 29,000 records on individual animals, including species, intake condition, intake type, sex, primary color, outcome type, and outcome date.
+
+### Data Cleaning Steps
+
+To prepare the data for analysis, we performed the following steps:
+
+- **Outcome Recoding**:  
+  We created a binary variable `adopted`, where:
+  - `1` = the animal was adopted (outcome_type == "Adoption")
+  - `0` = all other outcome types (e.g., transfer, return, euthanasia)
+
+- **Factor Conversion**:  
+  Categorical variables were converted into factors for modeling:
+  - `animal_type`, `intake_condition`, `sex`, `intake_type`, and `primary_color`
+
+- **Season Variable Engineering**:  
+  We created a `season` variable from `outcome_date`:
+  - Winter: December–February  
+  - Spring: March–May  
+  - Summer: June–August  
+  - Fall: September–November
+
+- **Color Grouping**:  
+  The original `primary_color` variable contained many highly specific labels (e.g., “blue merle”, “calico dilute”). We grouped these into broader, interpretable categories stored in a new `color` variable:
+  - *Patterns*: e.g., calico, tabby, merle
+  - *Browns*: e.g., brown, chocolate, sable
+  - *Grays and blues*: e.g., blue, gray, silver
+  - *Orange and red*: e.g., red, orange, ruddy
+  - *Black or dark*: e.g., black, tortie
+  - *White based*: e.g., white, lilac point
+  - *Cream and yellows*: e.g., cream, gold, wheat
+  - *Greens*: retained as a rare but existing entry
+
+- **Missing Data**:  
+  To ensure model integrity, we excluded rows with missing values in any of the analysis variables using `na.omit()`.
+
+The resulting cleaned dataset, named `longbeach_clean`, includes the following variables:
+- `adopted`
+- `animal_type`
+- `intake_condition`
+- `sex`
+- `intake_type`
+- `outcome_date`
+- `primary_color`
+- `season`
+- `color`
+
+This version was saved as an `.rds` file for reproducibility and used throughout the rest of the analysis.
+
+
+
+
+
 This is a good place where to include results of your exploratory data analysis. See @fig-eda as an example. 
 Check the .qmd file for an example of how to include plots, control their size and include references in the text. 
 
@@ -216,5 +272,4 @@ If you want to include your R code as an appendix, you can create a new code chu
 
 # Your code here
 ```
-
 
