@@ -124,6 +124,24 @@ longbeach <- longbeach %>%
     tolower(primary_color) %in% c("yellow", "blonde", "buff", "cream", "cream point", "cream tabby", "gold", "wheat") ~ "Cream and yellows",
     TRUE ~ NA_character_
   ))
+
+
+
+numberAdopted <- 6290/(23310+6290) *100
+
+
+# Check Adoption Rates
+adoption_rates <- longbeach_clean %>%
+  group_by(animal_type) %>%
+  summarise(adoption_rate = mean(adopted) * 100) %>%
+  arrange(desc(adoption_rate))
+
+print(adoption_rates)
+
+
+# Number of animals per animal type
+animal_counts <- longbeach %>%
+  count(animal_type)
 ```
 
 
