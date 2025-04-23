@@ -83,65 +83,13 @@ crabs <- crabs |>
 
 ```{r}
 # Load Data
-longbeach_partial <- readRDS("data/longbeach_partial.rds")
-
-# Create a binary variable: 1 if adopted, 0 otherwise
-longbeach <- longbeach_partial %>%
-  mutate(adopted = ifelse(tolower(trimws(outcome_type)) == "adoption", 1, 0))
-
-# Make animal type a factor
-longbeach <- longbeach %>%
-  mutate(
-    animal_type = as.factor(animal_type),
-    intake_condition = as.factor(intake_condition),
-    sex = as.factor(sex),
-    intake_type = as.factor(intake_type)
-  )
-
-# Make seasons
-longbeach <- longbeach %>%
-  mutate(season = case_when(
-    format(outcome_date, "%m") %in% c("12", "01", "02") ~ "Winter",
-    format(outcome_date, "%m") %in% c("03", "04", "05") ~ "Spring",
-    format(outcome_date, "%m") %in% c("06", "07", "08") ~ "Summer",
-    format(outcome_date, "%m") %in% c("09", "10", "11") ~ "Fall",
-    TRUE ~ NA_character_
-  ))
-longbeach_clean <- na.omit(longbeach %>%
-                             select(adopted, animal_type, intake_condition, sex, intake_type, outcome_date, primary_color, season))
-
-# Make larger categories of colors
-
-longbeach <- longbeach %>%
-  mutate(color = case_when(
-    tolower(primary_color) %in% c("tricolor", "calico", "tabby", "ticked", "dapple", "blue merle", "blue tick", "brown tiger", "liver tick", "point", "seal point") ~ "Patterns",
-    tolower(primary_color) %in% c("brown", "brown tabby", "brown brindle", "ch lynx point", "chocolate", "chocolate point", "brown merle", "sable", "snowshoe", "tan", "yellow brindle") ~ "Browns",
-    tolower(primary_color) %in% c("blue", "blue brindle", "blue lynx point", "blue cream", "blue point", "blue tabby", "gray", "gray tabby", "gray tiger", "lynx point", "seal", "silver", "silver tabby", "st lynx point", "tortie dilute") ~ "Grays and blues", 
-    tolower(primary_color) %in% c("apricot", "calico dilute", "calico point", "calico tabby", "fawn", "lilac_cream point", "liver", "orange", "orange tabby", "peach", "pink", "red", "red merle", "red point", "ruddy") ~ "Orange and Red",
-    tolower(primary_color) %in% c("black", "black lynx point", "black smoke", "black tabby", "black tiger", "torbie", "tortie") ~ "Black or Dark",
-    tolower(primary_color) %in% c("white", "flame point", "lilac lynx point", "lilac point", "silver lynx point") ~ "White Based",
-    tolower(primary_color) %in% c("green") ~ "Greens",
-    tolower(primary_color) %in% c("yellow", "blonde", "buff", "cream", "cream point", "cream tabby", "gold", "wheat") ~ "Cream and yellows",
-    TRUE ~ NA_character_
-  ))
-
-
-
-numberAdopted <- 6290/(23310+6290) *100
-
+longbeach <- readRDS("data/longbeach_clean.rds")
 
 # Check Adoption Rates
-adoption_rates <- longbeach_clean %>%
+adoption_rates <- longbeach %>%
   group_by(animal_type) %>%
   summarise(adoption_rate = mean(adopted) * 100) %>%
   arrange(desc(adoption_rate))
-
-print(adoption_rates)
-
-
-# Number of animals per animal type
-animal_counts <- longbeach %>%
-  count(animal_type)
 ```
 
 
@@ -170,8 +118,11 @@ plot2 <- ggplot(crabs) +
 plot_combined <- plot1 + plot2
 
 
-
-
+# Count and proportion of adopted vs. non-adopted animals
+adoption_counts <- longbeach %>%
+  mutate(adoption_status = ifelse(adopted == 1, "Adopted", "Not Adopted")) %>%
+  count(adoption_status) %>%
+  mutate(proportion = n / sum(n))
 
 ## Produce figures
 
@@ -496,4 +447,3 @@ If you want to include your R code as an appendix, you can create a new code chu
 
 # Your code here
 ```
-
