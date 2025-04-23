@@ -432,23 +432,61 @@ In our exploratory data analysis, we found that overall, there was a higher prop
 
 
 
-You should also explain the methods you employed. I expect you to define the statistical model you chose for your data in mathematical form, as we did throughout the course. 
+#You should also explain the methods you employed. I expect you to define the statistical model you chose for #your data in mathematical form, as we did throughout the course. 
 
-Crab example: we define as outcome the presence/absence of a satellite for each crab and denote the observed values as $y_i$ with $i = 1, \ldots, n$ with $n = 173$. Let $y_i = 1$ indicate presence of a satellite and $0$ otherwise. 
+#Crab example: 
 
-We assume that each $y_i$ is a realization of a random variables $Y_i \sim \mbox{Bernoulli}(p_i)$ independently, and model the probability of having a satellite for each crab using the following logistic regression:
+We define as outcome the adoption for each animal and denote the observed values as $y_i$ with $i = 1, \ldots, n$ with $n = 29600$. Let $y_i = 1$ indicate an animal being adopted and $0$ otherwise. 
+
+We assume that each $y_i$ is a realization of a random variables $Y_i \sim \mbox{Bernoulli}(p_i)$ independently, and model the probability of an animal being adopted using the following logistic regression:
 
 $$
 \begin{aligned}
   \mbox{logit}(p_i) = & \beta_0 + \\ 
-                    & \beta_1 \times \text{I(color == medium)}_i  \\
-                   & \beta_2 \times \text{I(color == dark medium)}_i \\
-                   & \beta_3 \times \text{I(color == dark)}_i \\
-                   & \beta_4  \times \text{I(width)}_i
+                    & \beta_1 \times \text{I(animal_type == amphibian)}_i  \\
+                    & \beta_2 \times \text{I(animal_type == bird)}_i  \\
+                    & \beta_3 \times \text{I(animal_type == cat)}_i  \\
+                    & \beta_4 \times \text{I(animal_type == guinea pig)}_i  \\
+                    & \beta_5 \times \text{I(animal_type == livestock)}_i  \\
+                    & \beta_6 \times \text{I(animal_type == other)}_i  \\
+                    & \beta_7 \times \text{I(animal_type == rabbit)}_i  \\
+                    & \beta_8 \times \text{I(animal_type == reptile)}_i  \\
+                    & \beta_9 \times \text{I(animal_type == wild)}_i  \\
+                   & \beta_10 \times \text{I(intake_condition == aged)}_i \\
+                   & \beta_11 \times \text{I(intake_condition == behavior mild)}_i \\
+                   & \beta_12 \times \text{I(intake_condition == behavior moderate)}_i \\
+                   & \beta_13 \times \text{I(intake_condition == behavior severe)}_i \\
+                   & \beta_14 \times \text{I(intake_condition == feral)}_i \\
+                   & \beta_15 \times \text{I(intake_condition == fractious)}_i \\
+                   & \beta_16 \times \text{I(intake_condition == i/i report)}_i \\
+                   & \beta_17 \times \text{I(intake_condition == ill mild)}_i \\
+                   & \beta_18 \times \text{I(intake_condition == ill moderatete)}_i \\
+                   & \beta_19 \times \text{I(intake_condition == ill severe)}_i \\
+                   & \beta_20 \times \text{I(intake_condition == injured mild)}_i \\
+                   & \beta_21 \times \text{I(intake_condition == injured moderate)}_i \\
+                   & \beta_22 \times \text{I(intake_condition == injured severe)}_i \\
+                   & \beta_23 \times \text{I(intake_condition == intakeexam)}_i \\
+                   & \beta_24 \times \text{I(intake_condition == under age/weight)}_i \\
+                   & \beta_25 \times \text{I(intake_condition == welfare seizures)}_i \\
+                   & \beta_26 \times \text{I(sex == Female)}_i \\
+                   & \beta_27 \times \text{I(sex == Neutered)}_i \\
+                   & \beta_28 \times \text{I(sex == Spayed)}_i \\
+                   & \beta_29 \times \text{I(intake_type == confiscate)}_i \\
+                   & \beta_30 \times \text{I(intake_type == euthenasia required)}_i \\
+                   & \beta_31 \times \text{I(intake_type == foster)}_i \\
+                   & \beta_32 \times \text{I(intake_type == owner surrender)}_i \\
+                   & \beta_33 \times \text{I(intake_type == quarantine)}_i \\
+                   & \beta_34 \times \text{I(intake_type == return)}_i \\
+                   & \beta_35 \times \text{I(intake_type == safe keep)}_i \\
+                   & \beta_36 \times \text{I(intake_type == stray)}_i \\
+                   & \beta_37 \times \text{I(intake_type == trap, neuter, return)}_i \\
+                   & \beta_38 \times \text{I(intake_type == welfare seized)}_i \\
+                   & \beta_39 \times \text{I(intake_type == wildlife)}_i \\
 \end{aligned}
-$$ {#eq-crab-model}
+$$
 
-where $\mbox{I}()$ in @eq-crab-model indicates a dummy variable, taking value 1 when the condition is true and zero otherwise. 
+
+where $\mbox{I}()$ indicates a dummy variable, taking value 1 when the condition is true and zero otherwise. 
 
 # Results
 Present your results in this section, including figures, tables, and any other relevant outputs from your analysis. 
