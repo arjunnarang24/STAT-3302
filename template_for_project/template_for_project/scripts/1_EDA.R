@@ -34,7 +34,7 @@ table(longbeach$adopted)
 numberAdopted <- 6290/(23310+6290) *100
 
 # Check Adoption Rates
-adoption_rates <- longbeach_clean %>%
+adoption_rates <- longbeach %>%
   group_by(animal_type) %>%
   summarise(adoption_rate = mean(adopted) * 100) %>%
   arrange(desc(adoption_rate))
@@ -44,6 +44,13 @@ print(adoption_rates)
 # Number of animals per animal type
 animal_counts <- longbeach %>%
   count(animal_type)
+
+# Count and proportion of adopted vs. non-adopted animals
+adoption_counts <- longbeach %>%
+  mutate(adoption_status = ifelse(adopted == 1, "Adopted", "Not Adopted")) %>%
+  count(adoption_status) %>%
+  mutate(proportion = n / sum(n))
+
 
 # Plotting raw numbers to just see how many of each animal we have
 animals <- ggplot(animal_counts, aes(x = reorder(animal_type, -n), y = n)) +
