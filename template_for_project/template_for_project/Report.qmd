@@ -129,6 +129,12 @@ longbeach <- longbeach %>%
 
 numberAdopted <- 6290/(23310+6290) *100
 
+# Count and proportion of adopted vs. non-adopted animals
+adoption_counts <- longbeach %>%
+  mutate(adoption_status = ifelse(adopted == 1, "Adopted", "Not Adopted")) %>%
+  count(adoption_status) %>%
+  mutate(proportion = n / sum(n))
+
 
 # Check Adoption Rates
 adoption_rates <- longbeach_clean %>%
