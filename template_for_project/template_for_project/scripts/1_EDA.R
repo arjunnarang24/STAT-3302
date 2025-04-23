@@ -1,5 +1,5 @@
 ## This script looks at exploratory data analysis 
-## Last modified: 2025-04-16
+## Last modified: 2025-04-23
 ## Moved the season variable to data cleaning and changed it so that the working directory is in the scripts (feel free to alter this if not satisfactory just let group know) - AN
 ## added our raw adoption percentage and number of animals adopted, plotted intake condition, intake type, sex, and color as we said in our proposal. - LW
 ############################
