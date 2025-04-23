@@ -494,6 +494,39 @@ $$
 
 where $\mbox{I}()$ indicates a dummy variable, taking value 1 when the condition is true and zero otherwise. 
 
+```{r}
+nyew2 = data.frame(animal_type = levels(longbeach_clean$animal_type))
+pred2 = predict(m1, newdata = nyew2, type = "link", se.fit = T)
+
+nyew2$prob = invlogit(pred2$fit)
+
+nyew2$prob_lower = invlogit(pred2$fit - 1.96*pred2$se.fit)
+nyew2$prob_upper = invlogit(pred2$fit + 1.96*pred2$se.fit)
+
+anyimal <- ggplot(longbeach_clean, aes(x = animal_type, y = adopted)) +
+  geom_jitter(height = 1/80, size = 3, alpha = 1/4) +
+  geom_pointrange(aes(y = prob, ymin = prob_lower, ymax = prob_upper), 
+                  data = nyew2, size = 1, color = scales::muted('blue')) +
+  labs(title = "Probability of Adoption based on Animal Type", x = "Animal Type", y = "p(Adopted)")
+print(anyimal)
+
+gm42 = glm(adopted ~ animal_type + intake_condition + sex + intake_type, data = longbeach_clean, family = binomial)
+
+resid.df = data.frame(fitted = gm42$fitted.values,
+                      deviance = resid(gm42, type = "deviance"), 
+                      Adopted = longbeach_clean$adopted,
+                      Animal = longbeach_clean$animal_type,
+                      intake_condition = longbeach_clean$intake_condition,
+                      Sex = longbeach_clean$sex,
+                      intake_type = longbeach_clean$intake_type)
+
+p_resid = ggplot(resid.df, aes(x = fitted, y = deviance)) +
+  geom_point() +
+  geom_hline(yintercept = 0, col = 2) +
+  labs(title = "Residuals", x = "Fitted", y = "Deviance")
+print(p_resid)
+```
+
 # Results
 Present your results in this section, including figures, tables, and any other relevant outputs from your analysis. 
 
