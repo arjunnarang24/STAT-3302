@@ -449,31 +449,17 @@ Sterilization status had a strong impact: Neutered animals: log-odds = 11.10, Sp
 ## Looking at AIC output and Stepwise Regression
 Step 1: Starting from the Null Model
 
-Null model AIC = 30623.21
+Null model AIC = 30623.21. Adding sex reduces the AIC to 22953.39, a substantial improvement of nearly 7,670 points, making it the strongest single predictor. Other predictors also lowered the AIC: intake_type: AIC = 25533.36, animal_type: AIC = 26776.34, intake_condition: AIC = 29932.68
 
-- Adding sex reduces the AIC to 22953.39, a substantial improvement of nearly 7,670 points, making it the strongest single predictor.
-- Other predictors also lowered the AIC: intake_type: AIC = 25533.36, animal_type: AIC = 26776.34, intake_condition: AIC = 29932.68
+Step 2: Adding to the Model with sex. The updated model is adopted ~ sex (AIC = 22953.39) Adding intake_condition yields a large drop in AIC to 22216.39, proving this variable meaningfully improves model performance. Adding other variables instead gives higher AICs: intake_type: AIC = 22616.49, animal_type: AIC = 22769.29
 
-Step 2: Adding to the Model with sex
-The updated model is adopted ~ sex (AIC = 22953.39)
+Step 3: Adding to the Model with sex + intake_condition. Current AIC = 22216.39. Adding intake_type lowers AIC further to 21928.34. Other options: animal_type: AIC = 22021.64, intake_type is selected as the next best variable.
 
-- Adding intake_condition yields a large drop in AIC to 22216.39, proving this variable meaningfully improves model performance
-- Adding other variables instead gives higher AICs: intake_type: AIC = 22616.49, animal_type: AIC = 22769.29
-
-Step 3: Adding to the Model with sex + intake_condition
-Current AIC = 22216.39
-
-- Adding intake_type lowers AIC further to 21928.34
-- Other options: animal_type: AIC = 22021.64, intake_type is selected as the next best variable.
 Summary of Optimal Model (Lowest AIC = 21928.34)
-
-
 The best model identified by stepwise selection includes:
 adopted ~ sex + intake_condition + intake_type. This model reduces the AIC by 8,695 points compared to the null model, showing a large improved fit. 
 
-Sex had the largest individual effect.
-Intake condition captures medical and behavioral differences in animals.
-Intake type reflects the context in which animals entered the shelter (for instance, foster, stray, TNR).
+Sex had the largest individual effect. Intake condition captures medical and behavioral differences in animals. Intake type reflects the context in which animals entered the shelter (for instance, foster, stray, TNR).
 
 ## Interpretting the Regression model and odds ratios
 Model Overview
@@ -521,36 +507,27 @@ Intake Type
 
 Animal Type
 
-- Probability Plot:
-This shows the estimated probability of adoption by animal type.
-    - Dogs and cats have moderate probabilities of adoption (~0.5–0.6). Birds, rabbits, and guinea pigs show higher probabilities. Livestock and reptiles also display high estimated probabilities, but these results may be due to low sample size or outlier cases (like adoptions through special programs).
+- Probability Plot: This shows the estimated probability of adoption by animal type. Dogs and cats have moderate probabilities of adoption (~0.5–0.6). Birds, rabbits, and guinea pigs show higher probabilities. Livestock and reptiles also display high estimated probabilities, but these results may be due to low sample size or outlier cases (like adoptions through special programs).
     
-- Residual Plot:
-The deviance residuals mostly fall within ±2, indicating good model fit across animal types. A few larger residuals are visible for less common types like wild or reptile, suggesting predictions for those types might be less accurate (less data). The model captures adoption trends well for major categories. Some rare animal types may need further data.
+- Residual Plot: The deviance residuals mostly fall within ±2, indicating good model fit across animal types. A few larger residuals are visible for less common types like wild or reptile, suggesting predictions for those types might be less accurate (less data). The model captures adoption trends well for major categories. Some rare animal types may need further data.
 
  Intake Condition 
  
-- Probability Plot: 
-Shows a clear trend: “Normal”, “under age/weight”, and “ill (mild)” animals have higher adoption probabilities. Severely ill, injured, feral, or fractious animals show much lower probabilities. Behavioral concerns—especially severe—lower adoption chances.
+- Probability Plot: Shows a clear trend: “Normal”, “under age/weight”, and “ill (mild)” animals have higher adoption probabilities. Severely ill, injured, feral, or fractious animals show much lower probabilities. Behavioral concerns—especially severe—lower adoption chances.
     
-- Residual Plot: 
-Most values fall within ±2, suggesting overall good model fit. Slight under- or overfitting is seen in categories with smaller sample sizes like “welfare seizures” and “i/i report”. Intake condition is a strong predictor of adoption. Predictions for rare or ambiguous categories (like “i/i report”) might be less reliable.
+- Residual Plot: Most values fall within ±2, suggesting overall good model fit. Slight under- or overfitting is seen in categories with smaller sample sizes like “welfare seizures” and “i/i report”. Intake condition is a strong predictor of adoption. Predictions for rare or ambiguous categories (like “i/i report”) might be less reliable.
 
  Intake Type 
 
-- Probability Plot: 
-Animals from foster, owner surrender, and stray categories have higher adoption probabilities. Trap-Neuter-Return (TNR) and wildlife have very low adoption probabilities—as expected since they are often returned, not adopted.
+- Probability Plot: Animals from foster, owner surrender, and stray categories have higher adoption probabilities. Trap-Neuter-Return (TNR) and wildlife have very low adoption probabilities—as expected since they are often returned, not adopted.
     
-- Residual Plot: 
-Deviance residuals mostly within ±2 again, showing decent fit. Some underprediction may occur for “stray” and “welfare seized,” possibly due to mixed adoption outcomes in those groups.The model fits well, and the adoption probabilities align with operational shelter expectations. Intake type strongly influences adoption likelihood.
+- Residual Plot: Deviance residuals mostly within ±2 again, showing decent fit. Some underprediction may occur for “stray” and “welfare seized,” possibly due to mixed adoption outcomes in those groups.The model fits well, and the adoption probabilities align with operational shelter expectations. Intake type strongly influences adoption likelihood.
 
  Sex 
  
-- Probability Plot:
-Spayed and neutered animals show significantly higher adoption probabilities. Unaltered males and females are less likely to be adopted.
+- Probability Plot: Spayed and neutered animals show significantly higher adoption probabilities. Unaltered males and females are less likely to be adopted.
     
-- Residual Plot: 
-Residuals are mostly near zero, indicating excellent model fit. Sterilization status is one of the most important predictors.
+- Residual Plot: Residuals are mostly near zero, indicating excellent model fit. Sterilization status is one of the most important predictors.
 
 Overall Model Fit: 
 - This plot displays deviance residuals vs. fitted values. Most residuals lie within the ±2 range across all predicted adoption probabilities. There's no major curvature or funneling, which supports the model’s assumption of linearity on the logit scale and homoscedasticity. The logistic model appears to be appropriate across the range of fitted probabilities. There are no signs of any large outliers.
