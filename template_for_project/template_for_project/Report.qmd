@@ -424,7 +424,7 @@ print(p_resid)
 
 The final logistic regression model included four key predictors: animal_type, intake_condition, sex, and intake_type. The model with these variables achieved the lowest AIC, indicating the best fit among the tested models. The baseline animal for comparison is a normally behaved, male, foster-intake dog.
 
-## Animal Type
+Animal Type
 Adoption likelihood varied significantly by species:
 
 - Birds were 2.84 times more likely to be adopted than the baseline.
@@ -432,21 +432,21 @@ Adoption likelihood varied significantly by species:
 - Livestock had the highest effect, with a log-odds coefficient of 13.11, though this may reflect a small sample size or special intake circumstances.
 - Other animals like reptiles were 1.80 log-odds more likely to be adopted than the baseline dog.
 
-## Intake Condition
+Intake Condition
 Animals arriving in better condition were more likely to be adopted:
 
 - Mildly ill or injured animals showed higher adoption likelihoods than those with severe conditions. For example: Ill (mild): 1.13, Under age/weight animals were also more likely to be adopted (1.25).
 - Behavioral concerns reduced adoption probability: Feral: 0.07, Fractious (aggressive): 0.18
 
-## Sex
+Sex
 Sterilization status had a strong impact: Neutered animals: log-odds = 11.10, Spayed animals: log-odds = 11.36 This shows that sterilized animals were far more likely to be adopted than intact males (the baseline group).
 
-## Intake Type
+Intake Type
 
 - Animals coming in through Trap-Neuter-Return (TNR) programs had much lower chances of adoption, with a coefficient of 0.03, indicating that these animals were likely returned to their environment rather than adopted. Foster intake (baseline) served as the reference for comparison.
 
 
-## Looking at AIC output and Stepwise Regression
+Looking at AIC output and Stepwise Regression
 Step 1: Starting from the Null Model
 
 Null model AIC = 30623.21. Adding sex reduces the AIC to 22953.39, a substantial improvement of nearly 7,670 points, making it the strongest single predictor. Other predictors also lowered the AIC: intake_type: AIC = 25533.36, animal_type: AIC = 26776.34, intake_condition: AIC = 29932.68
@@ -461,7 +461,7 @@ adopted ~ sex + intake_condition + intake_type. This model reduces the AIC by 8,
 
 Sex had the largest individual effect. Intake condition captures medical and behavioral differences in animals. Intake type reflects the context in which animals entered the shelter (for instance, foster, stray, TNR).
 
-## Interpretting the Regression model and odds ratios
+Interpretting the Regression model and odds ratios
 Model Overview
 This logistic regression model estimates the log-odds of an animal being adopted based on: Animal type, Intake condition, Sex, Intake type
 
@@ -503,7 +503,7 @@ Intake Type
 - trap, neuter, return (TNR): Estimate = –3.601, p = 0.023. Much lower likelihood of adoption (odds ratio ≈ 0.027), which makes sense since animals in this category are usually returned to their environment.
 - Other intake types (e.g., stray, owner surrender) were not statistically significant, suggesting their effect is less pronounced or more variable in the dataset.
 
-## Looking at each indivudal model
+Looking at each indivudal model
 
 Animal Type
 
