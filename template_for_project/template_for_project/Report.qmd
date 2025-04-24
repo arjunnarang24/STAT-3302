@@ -35,9 +35,7 @@ theme_set(
 
 # Abstract
 
-This project investigates the factors that influence pet adoption at the Long Beach Animal Shelter, using a dataset provided via the {animalshelter} R package and TidyTuesday repository. With over 29,000 animal records, we aim to identify the variables that significantly impact the likelihood of an animal being adopted.
-
-Our research focuses on predicting adoption (yes/no) using a logistic regression model. Key predictors include species animal_type, intake condition, sex, intake type, primary color, and season of outcome. After cleaning and transforming the dataset—including recoding the outcome into a binary variable and engineering a season variable—we explore adoption rates across each predictor and fit a Bernoulli logistic model to estimate the probability of adoption.
+We analyze over 29,000 records from the Long Beach Animal Shelter to identify key factors affecting pet adoption. Using logistic regression, we model the likelihood of adoption based on variables like animal type, intake condition, sex, and intake type. Our findings aim to inform data-driven strategies that improve adoption outcomes.
 
 # Introduction
 
@@ -55,11 +53,6 @@ Using data from the Long Beach Animal Shelter, we aim to model adoption probabil
 
 
 # Data and Methods
-
-Describe the data you used in your analysis, including the source, characteristics, and any pre-processing or cleaning steps you performed. 
-
-
-
 ```{r}
 # Load Data
 longbeach_partial <- readRDS("data/longbeach_partial.rds")
@@ -332,47 +325,18 @@ To prepare the data for analysis, we performed the following steps:
   - Fall: September–November
 
 - **Color Grouping**:  
-  The original `primary_color` variable contained many highly specific labels (e.g., “blue merle”, “calico dilute”). We grouped these into broader, interpretable categories stored in a new `color` variable:
-  - *Patterns*: e.g., calico, tabby, merle
-  - *Browns*: e.g., brown, chocolate, sable
-  - *Grays and blues*: e.g., blue, gray, silver
-  - *Orange and red*: e.g., red, orange, ruddy
-  - *Black or dark*: e.g., black, tortie
-  - *White based*: e.g., white, lilac point
-  - *Cream and yellows*: e.g., cream, gold, wheat
-  - *Greens*: retained as a rare but existing entry
+  The original `primary_color` variable contained many highly specific labels (e.g., “blue merle”, “calico dilute”). We grouped these into broader, interpretable categories stored in a new `color` variable.
 
 - **Missing Data**:  
   To ensure model integrity, we excluded rows with missing values in any of the analysis variables using `na.omit()`.
 
-The resulting cleaned dataset, named `longbeach_clean`, includes the following variables:
-- `adopted`
-- `animal_type`
-- `intake_condition`
-- `sex`
-- `intake_type`
-- `outcome_date`
-- `primary_color`
-- `season`
-- `color`
+The resulting cleaned dataset, named `longbeach_clean`.
 
 This version was saved as an `.rds` file for reproducibility and used throughout the rest of the analysis.
 
 
-
-
-
-This is a good place where to include results of your exploratory data analysis. See @fig-eda as an example. 
-Check the .qmd file for an example of how to include plots, control their size and include references in the text. 
-
-
 In our exploratory data analysis, we found that overall, there was a higher proportion of animals that were not adopted compared to adopted. Not adopted means everything other than adopted. So the animal could have passed away or been sent back, just not adopted. We also found that most of the plots created vs adoption rates have some categories that stick out more than the rest. The only plots that did not were color and seasons which were two categories that we mutated ourselves. All of the plots created during our exploratory data analysis can be seen above with comments to explain the graphs and how they helped us come to our overall conclusion.
 
-
-
-#You should also explain the methods you employed. I expect you to define the statistical model you chose for #your data in mathematical form, as we did throughout the course. 
-
-#Crab example: 
 
 We define as outcome the adoption for each animal and denote the observed values as $y_i$ with $i = 1, \ldots, n$ with $n = 29600$. Let $y_i = 1$ indicate an animal being adopted and $0$ otherwise. 
 
@@ -380,13 +344,52 @@ We assume that each $y_i$ is a realization of a random variables $Y_i \sim \mbox
 
 $$
 \begin{aligned}
-  \mathrm{logit}(p_i) = \beta_0 + \beta_1 \cdot I(\text{animal\_type}_i)\\
-+ \beta_2 \cdot I(\text{intake\_condition}_i) \\
-+ \beta_3 \cdot I(\text{sex}_i) + \beta_4 \cdot I(\text{intake\_type}_i)
+  \mathrm{logit}(p_i) =\ & \beta_0 
+  + \beta_1 \cdot \mathrm{I}(\text{animal\_type}_i = \text{amphibian}) 
+  + \beta_2 \cdot \mathrm{I}(\text{animal\_type}_i = \text{bird}) //
+  + \beta_3 \cdot \mathrm{I}(\text{animal\_type}_i = \text{cat}) 
+  + \beta_4 \cdot \mathrm{I}(\text{animal\_type}_i = \text{guinea pig}) 
+  + \beta_5 \cdot \mathrm{I}(\text{animal\_type}_i = \text{livestock}) \\
+  + \beta_6 \cdot \mathrm{I}(\text{animal\_type}_i = \text{other}) 
+  + \beta_7 \cdot \mathrm{I}(\text{animal\_type}_i = \text{rabbit}) 
+  + \beta_8 \cdot \mathrm{I}(\text{animal\_type}_i = \text{reptile}) \\
+  + \beta_9 \cdot \mathrm{I}(\text{animal\_type}_i = \text{wild}) 
+  + \beta_{10} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{aged}) 
+  + \beta_{11} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{behavior mild})\\ 
+  + \beta_{12} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{behavior moderate}) 
+  + \beta_{13} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{behavior severe}) 
+  + \beta_{14} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{feral}) \\
+  + \beta_{15} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{fractious}) 
+  + \beta_{16} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{i/i report}) 
+  + \beta_{17} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{ill mild}) \\
+  + \beta_{18} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{ill moderate}) 
+  + \beta_{19} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{ill severe}) 
+  + \beta_{20} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{injured mild}) \\ 
+  + \beta_{21} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{injured moderate}) 
+  + \beta_{22} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{injured severe}) 
+  + \beta_{23} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{intakeexam}) \\
+  + \beta_{24} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{under age/weight}) 
+  + \beta_{25} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{welfare seizures}) \\
+  + \beta_{26} \cdot \mathrm{I}(\text{sex}_i = \text{Female}) 
+  + \beta_{27} \cdot \mathrm{I}(\text{sex}_i = \text{Neutered}) \\
+  + \beta_{28} \cdot \mathrm{I}(\text{sex}_i = \text{Spayed}) 
+  + \beta_{29} \cdot \mathrm{I}(\text{intake\_type}_i = \text{confiscate}) \\
+  + \beta_{30} \cdot \mathrm{I}(\text{intake\_type}_i = \text{euthanasia required}) 
+  + \beta_{31} \cdot \mathrm{I}(\text{intake\_type}_i = \text{foster}) \\
+  + \beta_{32} \cdot \mathrm{I}(\text{intake\_type}_i = \text{owner surrender}) 
+  + \beta_{33} \cdot \mathrm{I}(\text{intake\_type}_i = \text{quarantine}) 
+  + \beta_{34} \cdot \mathrm{I}(\text{intake\_type}_i = \text{return}) \\
+  + \beta_{35} \cdot \mathrm{I}(\text{intake\_type}_i = \text{safe keep}) 
+  + \beta_{36} \cdot \mathrm{I}(\text{intake\_type}_i = \text{stray}) \\
+  + \beta_{37} \cdot \mathrm{I}(\text{intake\_type}_i = \text{trap, neuter, return}) 
+  + \beta_{38} \cdot \mathrm{I}(\text{intake\_type}_i = \text{welfare seized}) 
+  + \beta_{39} \cdot \mathrm{I}(\text{intake\_type}_i = \text{wildlife}) \\
 \end{aligned}
 $$
 
-where I indicates a series of dummy variables: animal_type = (bird, cat, livestock, etc.), intake_condition = (aged, behavior mild, etc.), sex = (female, spayed, neutered), and intake_type = (foster, stray, etc.) where those variables take value 1 when the condition is true and 0 otherwise. (beta_0 to beta_39).
+
+
+where $\mbox{I}()$ indicates a dummy variable, taking value 1 when the condition is true and zero otherwise. 
 
 ```{r}
 
@@ -578,11 +581,4 @@ Overall Model Fit:
 # Conclusion
 
 Overall, the best model we found that contained the lowest AIC value included four key predictions. These were animal type, intake condition, sex, and intake type. We found that sex was the strongest individual predictor for adoption likelihood. Sterilized animals were significantly more likely to be adopted than inteact males which was the baseline. The intake condition with the baseline as normally behaved reported that animals in poor health and behavioral issues were less likely to be adopted. Animals that were categorized as feral, fractious, or severe illness or injury had adoption odds 70-93% lower than healthy animals. Animal type is also a significant predictior. Our results showed that guinea pigs are 6 times more likely to be adopted than dogs and livestock was 13 times more likely to be adopted than dogs which was our baseline animal. Dogs however were the animal with the second highest population in the shelter. Lastly, types of stray, owner surrender, foster, and confinscate were not significantly significant predictors of adoption. TNR animals which stands for trapped, sterilized, and returned to their original location are not necessarily meant for adoption, however our model did show it was statistically significant. In the future, this is something to look more into specifically with TNR animals. Also in the future, it could be interesting to compare models when we group adoption vs. everything else as well as keeping the "everything else" categories separate. Overall, suggestions to the Long Beach Animal shelter would be to keep including variety in their animal selection because as we have seen in our results, it's not just perfect dogs and cats that get adopted. Every animal has a home.
-
-### References
-
-::: {#refs}
-:::
-
-# Appendix (Optional)
 
