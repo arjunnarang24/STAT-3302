@@ -35,13 +35,9 @@ theme_set(
 
 # Abstract
 
-Write a summary of your project (around 300 words) here. This section should provide a concise overview of your research question, data, methods, and key findings.
-
 This project investigates the factors that influence pet adoption at the Long Beach Animal Shelter, using a dataset provided via the {animalshelter} R package and TidyTuesday repository. With over 29,000 animal records, we aim to identify the variables that significantly impact the likelihood of an animal being adopted.
 
 Our research focuses on predicting adoption (yes/no) using a logistic regression model. Key predictors include species animal_type, intake condition, sex, intake type, primary color, and season of outcome. After cleaning and transforming the dataset—including recoding the outcome into a binary variable and engineering a season variable—we explore adoption rates across each predictor and fit a Bernoulli logistic model to estimate the probability of adoption.
-
-Preliminary analysis reveals variation in adoption likelihood across animal species and intake types, as well as some seasonal trends. This analysis offers actionable insights for shelters looking to optimize adoption efforts and prioritize animals who may need more assistance finding homes. CHANGE THIS (JUST FILLER)
 
 # Introduction
 
@@ -62,24 +58,7 @@ Using data from the Long Beach Animal Shelter, we aim to model adoption probabil
 
 Describe the data you used in your analysis, including the source, characteristics, and any pre-processing or cleaning steps you performed. 
 
-```{r}
-## Do not include much code in the report
-## make separate scripts if you have a lot of cleaning to do for the data
-## and for model exploration 
 
-## reading data
-crabs <- read_csv(file= "data/crabs_cleaned.csv")
-
-## convert to factor the necesary variables
-crabs <- crabs |>
-  mutate(
-    color = factor(color, 
-                   labels = c("light medium", "medium", "dark medium", "dark")),
-    spine = factor(spine, 
-                   labels = c("both good", "one worn or broken", "both worn or broken")), 
-)
-
-```
 
 ```{r}
 # Load Data
@@ -154,33 +133,6 @@ animal_counts <- longbeach %>%
 
 
 ```{r}
-## Produce figures
-
-crabs_prop <- crabs |>
-  group_by(color) |>
-  summarize(
-    prop_has_satellite = mean(has_satellite),
-    logit_prob_has_satellite = logit(prop_has_satellite),
-    total_crabs = length(has_satellite)
-  )
-
-plot1 <- ggplot(crabs_prop, aes(color, logit_prob_has_satellite)) +
-  geom_point() + 
-  labs(y = 'logit of proportion with satellite')
-
-plot2 <- ggplot(crabs) +
-     geom_boxplot(aes(x = width, y = has_satellite, group = has_satellite)) +
-     labs(title = "Distribution of width across groups")
- 
-# Arrange multiple plots using patchwork
-plot_combined <- plot1 + plot2
-
-
-
-
-
-## Produce figures
-
 # Number of animals per animal type
 animal_counts <- longbeach %>%
   count(animal_type)
@@ -319,14 +271,6 @@ rateByColor <- ggplot(rateColor, aes(x = reorder(color, -adoption_rate), y = ado
   ))
 
 
-print(animals)
-print(rateByColor)
-print(rateByCondition)
-print(rateBySex)
-print(rateByType)
-print(seasonalPlot)
-print(adoptionProp)
-
 combined <- rateByColor + rateByCondition +rateBySex + rateByType
 combined1 <-  seasonalPlot + adoptionProp 
 combined2 <- animals
@@ -335,18 +279,6 @@ combined2 <- animals
 ```
 
 ```{r}
-#| label: fig-eda
-#| fig-cap: "Example figure showing two plots side by side; here in the caption you should write a brief description of what the two plots represents: ``Left side panel shows the logit of the proportion of crabs with satellites for each group of crabs with different color. The right side panel shows the distirbution of the width among crabs with and without satellites.'' "
-#| fig-width: 6
-#| fig-height: 3
-#| fig-show: hold
-
-# Display the combined plot
-plot_combined
-
-
-
-
 #| label: fig-eda
 #| fig-cap: "These four figures show the plots that are shown with respect to adoption rates. The titles explain what we are looking at in these graphs. Based on this priliminary analysis, we were able to guide our thinking and questions with more knowledge and understanding of the data. "
 #| fig-width: 10
@@ -448,53 +380,56 @@ We assume that each $y_i$ is a realization of a random variables $Y_i \sim \mbox
 
 $$
 \begin{aligned}
-  \mbox{logit}(p_i) = & \beta_0 + \\ 
-                    & \beta_1 \times \text{I(animal_type == amphibian)}_i  \\
-                    & \beta_2 \times \text{I(animal_type == bird)}_i  \\
-                    & \beta_3 \times \text{I(animal_type == cat)}_i  \\
-                    & \beta_4 \times \text{I(animal_type == guinea pig)}_i  \\
-                    & \beta_5 \times \text{I(animal_type == livestock)}_i  \\
-                    & \beta_6 \times \text{I(animal_type == other)}_i  \\
-                    & \beta_7 \times \text{I(animal_type == rabbit)}_i  \\
-                    & \beta_8 \times \text{I(animal_type == reptile)}_i  \\
-                    & \beta_9 \times \text{I(animal_type == wild)}_i  \\
-                   & \beta_10 \times \text{I(intake_condition == aged)}_i \\
-                   & \beta_11 \times \text{I(intake_condition == behavior mild)}_i \\
-                   & \beta_12 \times \text{I(intake_condition == behavior moderate)}_i \\
-                   & \beta_13 \times \text{I(intake_condition == behavior severe)}_i \\
-                   & \beta_14 \times \text{I(intake_condition == feral)}_i \\
-                   & \beta_15 \times \text{I(intake_condition == fractious)}_i \\
-                   & \beta_16 \times \text{I(intake_condition == i/i report)}_i \\
-                   & \beta_17 \times \text{I(intake_condition == ill mild)}_i \\
-                   & \beta_18 \times \text{I(intake_condition == ill moderatete)}_i \\
-                   & \beta_19 \times \text{I(intake_condition == ill severe)}_i \\
-                   & \beta_20 \times \text{I(intake_condition == injured mild)}_i \\
-                   & \beta_21 \times \text{I(intake_condition == injured moderate)}_i \\
-                   & \beta_22 \times \text{I(intake_condition == injured severe)}_i \\
-                   & \beta_23 \times \text{I(intake_condition == intakeexam)}_i \\
-                   & \beta_24 \times \text{I(intake_condition == under age/weight)}_i \\
-                   & \beta_25 \times \text{I(intake_condition == welfare seizures)}_i \\
-                   & \beta_26 \times \text{I(sex == Female)}_i \\
-                   & \beta_27 \times \text{I(sex == Neutered)}_i \\
-                   & \beta_28 \times \text{I(sex == Spayed)}_i \\
-                   & \beta_29 \times \text{I(intake_type == confiscate)}_i \\
-                   & \beta_30 \times \text{I(intake_type == euthenasia required)}_i \\
-                   & \beta_31 \times \text{I(intake_type == foster)}_i \\
-                   & \beta_32 \times \text{I(intake_type == owner surrender)}_i \\
-                   & \beta_33 \times \text{I(intake_type == quarantine)}_i \\
-                   & \beta_34 \times \text{I(intake_type == return)}_i \\
-                   & \beta_35 \times \text{I(intake_type == safe keep)}_i \\
-                   & \beta_36 \times \text{I(intake_type == stray)}_i \\
-                   & \beta_37 \times \text{I(intake_type == trap, neuter, return)}_i \\
-                   & \beta_38 \times \text{I(intake_type == welfare seized)}_i \\
-                   & \beta_39 \times \text{I(intake_type == wildlife)}_i \\
+  \mathrm{logit}(p_i) =\ & \beta_0 \\
+  &+ \beta_1 \cdot \mathrm{I}(\text{animal\_type}_i = \text{amphibian}) \\
+  &+ \beta_2 \cdot \mathrm{I}(\text{animal\_type}_i = \text{bird}) \\
+  &+ \beta_3 \cdot \mathrm{I}(\text{animal\_type}_i = \text{cat}) \\
+  &+ \beta_4 \cdot \mathrm{I}(\text{animal\_type}_i = \text{guinea pig}) \\
+  &+ \beta_5 \cdot \mathrm{I}(\text{animal\_type}_i = \text{livestock}) \\
+  &+ \beta_6 \cdot \mathrm{I}(\text{animal\_type}_i = \text{other}) \\
+  &+ \beta_7 \cdot \mathrm{I}(\text{animal\_type}_i = \text{rabbit}) \\
+  &+ \beta_8 \cdot \mathrm{I}(\text{animal\_type}_i = \text{reptile}) \\
+  &+ \beta_9 \cdot \mathrm{I}(\text{animal\_type}_i = \text{wild}) \\
+  &+ \beta_{10} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{aged}) \\
+  &+ \beta_{11} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{behavior mild}) \\
+  &+ \beta_{12} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{behavior moderate}) \\
+  &+ \beta_{13} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{behavior severe}) \\
+  &+ \beta_{14} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{feral}) \\
+  &+ \beta_{15} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{fractious}) \\
+  &+ \beta_{16} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{i/i report}) \\
+  &+ \beta_{17} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{ill mild}) \\
+  &+ \beta_{18} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{ill moderate}) \\
+  &+ \beta_{19} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{ill severe}) \\
+  &+ \beta_{20} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{injured mild}) \\
+  &+ \beta_{21} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{injured moderate}) \\
+  &+ \beta_{22} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{injured severe}) \\
+  &+ \beta_{23} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{intakeexam}) \\
+  &+ \beta_{24} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{under age/weight}) \\
+  &+ \beta_{25} \cdot \mathrm{I}(\text{intake\_condition}_i = \text{welfare seizures}) \\
+  &+ \beta_{26} \cdot \mathrm{I}(\text{sex}_i = \text{Female}) \\
+  &+ \beta_{27} \cdot \mathrm{I}(\text{sex}_i = \text{Neutered}) \\
+  &+ \beta_{28} \cdot \mathrm{I}(\text{sex}_i = \text{Spayed}) \\
+  &+ \beta_{29} \cdot \mathrm{I}(\text{intake\_type}_i = \text{confiscate}) \\
+  &+ \beta_{30} \cdot \mathrm{I}(\text{intake\_type}_i = \text{euthanasia required}) \\
+  &+ \beta_{31} \cdot \mathrm{I}(\text{intake\_type}_i = \text{foster}) \\
+  &+ \beta_{32} \cdot \mathrm{I}(\text{intake\_type}_i = \text{owner surrender}) \\
+  &+ \beta_{33} \cdot \mathrm{I}(\text{intake\_type}_i = \text{quarantine}) \\
+  &+ \beta_{34} \cdot \mathrm{I}(\text{intake\_type}_i = \text{return}) \\
+  &+ \beta_{35} \cdot \mathrm{I}(\text{intake\_type}_i = \text{safe keep}) \\
+  &+ \beta_{36} \cdot \mathrm{I}(\text{intake\_type}_i = \text{stray}) \\
+  &+ \beta_{37} \cdot \mathrm{I}(\text{intake\_type}_i = \text{trap, neuter, return}) \\
+  &+ \beta_{38} \cdot \mathrm{I}(\text{intake\_type}_i = \text{welfare seized}) \\
+  &+ \beta_{39} \cdot \mathrm{I}(\text{intake\_type}_i = \text{wildlife}) \\
 \end{aligned}
 $$
+
 
 
 where $\mbox{I}()$ indicates a dummy variable, taking value 1 when the condition is true and zero otherwise. 
 
 ```{r}
+
+m1 = glm(adopted ~ animal_type, data = longbeach_clean)
 nyew2 = data.frame(animal_type = levels(longbeach_clean$animal_type))
 pred2 = predict(m1, newdata = nyew2, type = "link", se.fit = T)
 
@@ -528,31 +463,7 @@ print(p_resid)
 ```
 
 # Results
-Present your results in this section, including figures, tables, and any other relevant outputs from your analysis. 
 
-```{r}
-#| label: model-summary
-#| tbl-cap: "Logistic regression summary"
-
-m_color_width <- glm(has_satellite ~ color + width, family = 'binomial', data = crabs)
-summ(m_color_width, model.info = FALSE, model.fit = FALSE)
-```
-
-You can also include figure that you previously saved. 
-
-![Example of how to include a figure](figures/3302_header.jpg){width=60%}
-
-See \url{https://quarto.org/docs/authoring/figures.html} for more options. 
-
-To display the model summary in a nice format you can use the `summ()` function from the `jtools` package.
- 
-Other libraries: 
-\begin{itemize}
-\item \texttt{xtable}: good if you are familiar with latex (see \href{https://cran.r-project.org/web/packages/xtable/vignettes/xtableGallery.pdf}{xtable documentation} for examples)
-\item \texttt{gtable}, implements a ``grammar of table'' idea (see \url{https://gt.rstudio.com} for documentation)
-\end{itemize}
-
-In this section, discuss and interpret your results. Explain the implications and significance of your findings, and relate them to your research question and existing literature or theories.
 
 We used a logistic regression to model the probability that an animal at the Long Beach Animal Shelter is adopted. The final model was selected using forward stepwise AIC reduction and includes the predictors: animal_type, intake_condition, sex, and intake_type.
 
@@ -561,7 +472,7 @@ Residual deviance: 21,683 on 29,559 degrees of freedom
 AIC: 21,765, representing lots of improvement from the null model AIC of 30,623.21
 
 The final model is:
-logit(p_i) = β0 + β1*animal_type + β2*intake_condition + β3*sex + β4*intake_type
+logit(p_i) = $\beta_0$ +  $\beta_1$*animal_type + $beta_2$*intake_condition + $\beta_3$*sex + $\beta_4$*intake_type
 
 Baseline: Normally behaved, male, foster, dog
 
@@ -768,4 +679,3 @@ If you want to include your R code as an appendix, you can create a new code chu
 
 # Your code here
 ```
-
